@@ -22,7 +22,7 @@ public class PentominosBoard implements Comparable<PentominosBoard>{
      * the remaining squares will be at positions (r+a,c+b), (r+c,c+d), (r+e,c+f), and (r+g,c+h).
      * This representation is used in the putPiece() and removePiece() methods. 
      */
-    private  static final int[][] pieces = {
+    public static final int[][] pieces = {
         { 1, 0,1,0,2,0,3,0,4 },  // Describes piece 1 (the "I" pentomino) in its horizontal orientation.
         { 1, 1,0,2,0,3,0,4,0 },  // Describes piece 1 (the "I" pentomino) in its vertical orientation.
         { 2, 1,-1,1,0,1,1,2,0 }, // The "X" pentomino, in its only orientation.

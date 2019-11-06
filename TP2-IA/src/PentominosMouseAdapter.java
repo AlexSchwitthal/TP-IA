@@ -15,9 +15,6 @@ public class PentominosMouseAdapter extends MouseAdapter{
 		PentominosBoard pb = new PentominosBoard();
         GeneticAlgorithm ga = new GeneticAlgorithm(pb,100);
         //pb = ga.solve( 0.1, 0.05);
-        pb.putPiece(0, 0, 1);
-    	System.out.println(pb.getBoard(1, 1));
-    	System.out.println("\n\n\n\n"); 
 
         for(int i = 0 ; i < ga.population.size(); i++) {
         	if(ga.population.get(i).nbrConflict() == 0)
