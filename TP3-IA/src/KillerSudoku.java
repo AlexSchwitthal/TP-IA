@@ -110,27 +110,43 @@ public class KillerSudoku extends JFrame implements ActionListener, CaretListene
 	}
 	
 	public void solve() {
-		Model model = new Model("Choco solver");
-		IntVar[][] row = new IntVar[9][9];
-		IntVar[][] col = new IntVar[9][9];
-		IntVar[][] block = new IntVar[9][9];
+		Model model = new Model("choco solver");
+		IntVar [][] row = new IntVar[9][9];
+		IntVar [][] col = new IntVar[9][9];
+		IntVar [][] block = new IntVar[9][9];
 		
-		for(int i = 0; i < 9; i++) {
-			for(int j = 0; i < 9; i++) {
-				IntVar a = model.intVar("domaine", 1, 9);
+		for (int i = 0; i<9; i++) {
+			for (int j = 0; j<9; j++) {
+				IntVar a = model.intVar("choco solver", new int[] {1,2,3,4,5,6,7,8,9});
 				row[i][j] = a;
-				col[j][i] = a;
-				block[i/3 * 3 + j/3][i%3 * 3 + j%3] = a;
-			}
-		}
-		
-		for(Cage c: this.cages) {
-			int sum = 0;
-			for(Pair p: c.cells) {
+				col [j][i] = a;
+				block [(i/3)*3+j/3][(i%3)*3+j%3] = a;
 				
 			}
+		}		
+		for (int i = 0; i < 9; i++) {
+			model.allDifferent(row[i]).post();
+			model.allDifferent(col[i]).post();
+			model.allDifferent(block[i], "diff in block").post();
 		}
-		model.getSolver();
+
+		for (Cage cage : this.cages) {
+			IntVar[] pair = new IntVar[cage.cells.size()];
+			for(int i = 0; i < cage.cells.size(); i++) {
+				Pair p = cage.cells.get(i);
+				pair[i] = col[p.ord-1][p.abs-1];
+			}
+
+			model.sum(pair, "=" , cage.sum).post();	
+		}
+		
+		System.out.println(model.getSolver().solve());
+		
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				this.grid[i][j] = row[i][j].getValue();
+			}
+		}
 	}
 	
 	public boolean isSolved() {
